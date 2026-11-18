@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ApexBank | Modern Digital Banking & Wealth</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+</head>
+<body class="dark-theme">
+
+  <!-- =========================================================================
+       Top Header & Navigation
+       ========================================================================= -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand-group" id="brand-home" title="ApexBank Digital Portal">
+        <div class="brand-logo-icon">🏦</div>
+        <div class="brand-text">
+          <h1>ApexBank <span class="brand-badge">PRO</span></h1>
+          <span class="brand-tagline">Next-Generation Financial Platform</span>
+        </div>
+      </div>
+
+      <div class="header-controls">
+        <!-- Account Switcher -->
+        <div class="account-selector-wrap" title="Switch active account">
+          <select id="active-account-select" class="account-select">
+            <!-- Populated dynamically by store -->
+          </select>
+          <span class="select-arrow">▼</span>
+        </div>
+
+        <!-- Currency Picker -->
+        <div class="account-selector-wrap" title="Change display currency">
+          <select id="currency-select" class="currency-select">
+            <option value="USD">USD ($)</option>
+            <option value="EUR">EUR (€)</option>
+            <option value="GBP">GBP (£)</option>
+            <option value="INR">INR (₹)</option>
+            <option value="CAD">CAD ($)</option>
+            <option value="JPY">JPY (¥)</option>
+          </select>
+          <span class="select-arrow">▼</span>
+        </div>
+
+        <!-- Dark / Light Theme Toggle -->
+        <button id="theme-toggle-btn" class="icon-btn" title="Toggle Dark/Light Mode" aria-label="Toggle Theme">
+          <span id="theme-icon">🌙</span>
+        </button>
+
+        <!-- User Profile Pill -->
+        <div class="user-profile-badge">
+          <img id="user-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" alt="User Profile" class="user-avatar-img">
+          <span id="user-name" class="user-name-text">Alex Morgan</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       Main Dashboard View
+       ========================================================================= -->
+  <main class="app-main">
+
+    <!-- Top Grid: Left Side (Hero, Actions, Analytics) & Right Side (Card, Bills, Goals) -->
+    <div class="dashboard-grid">
+
+      <!-- LEFT COLUMN -->
+      <div class="dashboard-left-col">
+
+        <!-- Balance Hero Card -->
+        <section class="balance-hero-card" aria-label="Account Balance">
+          <div class="balance-header">
+            <span class="balance-label">Total Available Balance</span>
+            <button id="balance-privacy-btn" class="btn-privacy" title="Hide or show balance" aria-label="Toggle balance privacy">
+              <span id="privacy-icon">👁️</span>
+            </button>
+          </div>
+
+          <div class="balance-value-row">
+            <h2 id="main-balance" class="main-balance-text">$14,850.75</h2>
+          </div>
+
+          <div id="account-subtitle" class="account-meta-line">
+            Checking Account • Acct # 4092 8821 7349 • Routing # 021000021
+          </div>
+
+          <!-- KPI Triad -->
+          <div class="metrics-triad">
+            <div class="metric-item">
+              <span class="metric-label"><span>🟢</span> Inflow this Month</span>
+              <span id="monthly-inflow" class="metric-value text-positive">$6,418.40</span>
+            </div>
+            <div class="metric-item">
+              <span class="metric-label"><span>🔴</span> Outflow this Month</span>
+              <span id="monthly-outflow" class="metric-value text-negative">$1,720.89</span>
+            </div>
+            <div class="metric-item">
+              <span class="metric-label"><span>📈</span> Net Cashflow</span>
+              <span id="net-savings" class="metric-value text-positive">+$4,697.51</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Quick Action Bar -->
+        <section class="quick-actions-bar" aria-label="Quick Banking Actions">
+          <button id="btn-action-deposit" class="action-btn" title="Deposit Money">
+            <div class="action-icon">📥</div>
+            <span class="action-text">Deposit</span>
+          </button>
+          <button id="btn-action-withdraw" class="action-btn" title="Withdraw Funds">
+            <div class="action-icon">📤</div>
+            <span class="action-text">Withdraw</span>
+          </button>
+          <button id="btn-action-transfer" class="action-btn" title="Send or Transfer Money">
+            <div class="action-icon">💸</div>
+            <span class="action-text">Transfer</span>
+          </button>
+          <button id="btn-action-new-account" class="action-btn" title="Open New Sub-Account">
+            <div class="action-icon">➕</div>
+            <span class="action-text">New Account</span>
+          </button>
+          <button id="btn-action-new-goal" class="action-btn" title="Create Savings Goal">
+            <div class="action-icon">🎯</div>
+            <span class="action-text">New Goal</span>
+          </button>
+        </section>
+
+        <!-- Cashflow Analytics Chart & Categories -->
+        <section class="card-panel chart-section" aria-label="Cashflow Analytics">
+          <div class="panel-header">
+            <div>
+              <h3 class="panel-title">📊 Cashflow Analytics</h3>
+              <p class="panel-subtitle">Monthly Income vs Outgoings comparison</p>
+            </div>
+            <div class="chart-legend">
+              <div class="legend-item"><span class="legend-dot dot-inflow"></span> Inflow</div>
+              <div class="legend-item"><span class="legend-dot dot-outflow"></span> Outflow</div>
+            </div>
+          </div>
+
+          <div class="chart-wrapper">
+            <canvas id="cashflow-canvas"></canvas>
+          </div>
+
+          <!-- Spending Category Breakdown -->
+          <div style="margin-top: 1rem;">
+            <div class="panel-header" style="margin-bottom: 0.75rem;">
+              <h4 class="panel-title" style="font-size: 0.95rem;">🏷️ Spending by Category</h4>
+              <span class="panel-subtitle">Current cycle allocation</span>
+            </div>
+            <div id="category-breakdown-container">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- RIGHT COLUMN -->
+      <div class="dashboard-right-col" style="display: flex; flex-direction: column; gap: 1.75rem;">
+
+        <!-- Virtual Debit Card Widget -->
+        <section class="card-panel card-widget" aria-label="Virtual Card">
+          <div class="panel-header" style="margin-bottom: 0.5rem;">
+            <h3 class="panel-title">💳 Platinum Debit Card</h3>
+            <span id="card-status-badge" class="card-badge badge-active">Active • Contactless</span>
+          </div>
+
+          <!-- Interactive 3D Card -->
+          <div class="virtual-card-wrapper">
+            <div id="virtual-card" class="virtual-card">
+              <div class="card-top">
+                <div class="card-chip"></div>
+                <span class="card-brand-logo">APEX // PLATINUM</span>
+              </div>
+              <div class="card-mid">
+                <div id="card-number" class="card-number">•••• •••• •••• 9081</div>
+              </div>
+              <div class="card-bottom">
+                <div class="card-detail-group">
+                  <div class="card-detail-item">
+                    <span class="card-detail-label">Cardholder</span>
+                    <span id="card-holder" class="card-detail-val">ALEX MORGAN</span>
+                  </div>
+                  <div class="card-detail-item">
+                    <span class="card-detail-label">Expires</span>
+                    <span id="card-expiry" class="card-detail-val">09/29</span>
+                  </div>
+                  <div class="card-detail-item">
+                    <span class="card-detail-label">CVV</span>
+                    <span id="card-cvv" class="card-detail-val">•••</span>
+                  </div>
+                </div>
+                <div class="card-scheme" style="font-size: 1.25rem; font-weight: 800; font-style: italic;">VISA</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card Controls -->
+          <div class="card-actions-bar">
+            <button id="card-reveal-btn" class="btn btn-secondary btn-sm">Show Details</button>
+            <button id="toggle-card-lock-btn" class="btn btn-secondary btn-sm">Freeze Card</button>
+          </div>
+
+          <!-- Daily Limit Progress -->
+          <div class="card-limit-box">
+            <div class="card-limit-header">
+              <span class="limit-spent-label">Daily Spend Limit</span>
+              <span class="limit-spent-val"><span id="card-spent-text">$184.50</span> / <span id="card-limit-text">$3,000.00</span></span>
+            </div>
+            <div class="progress-track">
+              <div id="card-limit-progress" class="progress-bar" style="width: 6%;"></div>
+            </div>
+            <div style="text-align: right; margin-top: 0.2rem;">
+              <button id="edit-card-limit-btn" class="btn-subtle btn-xs" style="padding: 0.15rem 0.5rem;">Adjust Daily Limit</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Quick Transfer Beneficiaries -->
+        <section class="card-panel" aria-label="Frequent Contacts">
+          <div class="panel-header" style="margin-bottom: 0.75rem;">
+            <h3 class="panel-title">👥 Quick Transfer</h3>
+            <span class="panel-subtitle">Instant 1-Click Pay</span>
+          </div>
+          <div id="beneficiaries-list" class="beneficiaries-wrapper">
+            <!-- Dynamic contacts -->
+          </div>
+        </section>
+
+        <!-- Upcoming Bills & Subscriptions -->
+        <section class="card-panel" aria-label="Bills and Subscriptions">
+          <div class="panel-header" style="margin-bottom: 0.75rem;">
+            <h3 class="panel-title">🧾 Upcoming Bills</h3>
+            <span class="panel-subtitle">Due soon</span>
+          </div>
+          <div id="bills-container" class="bills-list">
+            <!-- Dynamic bills -->
+          </div>
+        </section>
+
+        <!-- Savings Goals Tracker -->
+        <section class="card-panel" aria-label="Savings Goals">
+          <div class="panel-header" style="margin-bottom: 0.75rem;">
+            <h3 class="panel-title">🎯 Savings Vaults</h3>
+            <span class="panel-subtitle">Target progress</span>
+          </div>
+          <div id="goals-container" class="goals-list">
+            <!-- Dynamic goals -->
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+    <!-- =========================================================================
+         Full Width Transactions Ledger
+         ========================================================================= -->
+    <section class="card-panel transactions-panel" aria-label="Transaction Ledger">
+      <div class="panel-header" style="flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <h3 class="panel-title">📜 Transaction History & Statements</h3>
+          <p class="panel-subtitle">Real-time ledger with automated receipt verification</p>
+        </div>
+        <button id="export-csv-btn" class="btn btn-secondary btn-sm">
+          📥 Download Statement (CSV)
+        </button>
+      </div>
+
+      <!-- Filters & Search Toolbar -->
+      <div class="tx-toolbar">
+        <div class="search-input-wrap">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="tx-search-input" class="search-input" placeholder="Search by merchant, note, or ref #...">
+        </div>
+
+        <div class="tx-filters-group">
+          <select id="tx-category-filter" class="filter-select">
+            <option value="ALL">All Categories</option>
+            <option value="Salary">Salary & Income</option>
+            <option value="Transfer">Transfers</option>
+            <option value="Shopping">Shopping</option>
+            <option value="Food & Dining">Food & Dining</option>
+            <option value="Utilities">Utilities & Bills</option>
+            <option value="Entertainment">Entertainment</option>
+            <option value="Transport">Transport</option>
+            <option value="Interest">Interest & Dividends</option>
+          </select>
+
+          <select id="tx-type-filter" class="filter-select">
+            <option value="ALL">All Flow Types</option>
+            <option value="INFLOW">Incoming Funds (+)</option>
+            <option value="OUTFLOW">Outgoing Funds (-)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Transactions Table -->
+      <div class="tx-table-container">
+        <table class="tx-table">
+          <thead>
+            <tr>
+              <th>Description / Merchant</th>
+              <th>Category</th>
+              <th>Date & Time</th>
+              <th>Status</th>
+              <th>Amount</th>
+              <th>Receipt</th>
+            </tr>
+          </thead>
+          <tbody id="transactions-list">
+            <!-- Dynamic rows -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =========================================================================
+       Footer
+       ========================================================================= -->
+  <footer class="app-footer">
+    <div>
+      © 2026 Apex Financial Technologies Corp. Member FDIC. Equal Housing Lender ⌂.
+    </div>
+    <div class="footer-links">
+      <span style="color: var(--success);">🔒 256-Bit SSL Encrypted</span>
+      <span>•</span>
+      <button id="btn-reset-demo" class="footer-btn-link">Reset Demo Database</button>
+    </div>
+  </footer>
+
+  <!-- =========================================================================
+       MODALS
+       ========================================================================= -->
+
+  <!-- 1. DEPOSIT MODAL -->
+  <div id="modal-deposit" class="modal-overlay">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">📥 Deposit Funds</h3>
+        <button class="modal-close-btn" data-modal-close>&times;</button>
+      </div>
+      <form id="form-deposit">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="deposit-target-account">Target Account</label>
+            <select id="deposit-target-account" class="form-control" required></select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="deposit-amount">Deposit Amount</label>
+            <div class="input-with-currency">
+              <span class="currency-symbol-addon">$</span>
+              <input type="number" id="deposit-amount" class="form-control" step="0.01" min="1" placeholder="0.00" required>
+            </div>
+          </div>
+
+          <!-- Preset amounts -->
+          <div class="preset-buttons-row">
+            <button type="button" class="preset-btn" data-target-input="deposit-amount" data-amount="50">+$50</button>
+            <button type="button" class="preset-btn" data-target-input="deposit-amount" data-amount="100">+$100</button>
+            <button type="button" class="preset-btn" data-target-input="deposit-amount" data-amount="500">+$500</button>
+            <button type="button" class="preset-btn" data-target-input="deposit-amount" data-amount="1000">+$1,000</button>
+            <button type="button" class="preset-btn" data-target-input="deposit-amount" data-amount="2500">+$2,500</button>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="deposit-method">Deposit Method</label>
+            <select id="deposit-method" class="form-control">
+              <option value="Instant ACH Bank Transfer">Instant ACH Bank Transfer (Free)</option>
+              <option value="Linked Debit Card (Instant)">Linked Debit Card (Instant)</option>
+              <option value="Mobile Check Capture">Mobile Check Capture</option>
+              <option value="Wire Transfer">Domestic Wire Transfer</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="deposit-note">Memo / Reference Note (Optional)</label>
+            <input type="text" id="deposit-note" class="form-control" placeholder="e.g. Consulting invoice, tax refund">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-modal-close>Cancel</button>
+          <button type="submit" class="btn btn-primary">Confirm Deposit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 2. WITHDRAW MODAL -->
+  <div id="modal-withdraw" class="modal-overlay">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">📤 Withdraw Funds</h3>
+        <button class="modal-close-btn" data-modal-close>&times;</button>
+      </div>
+      <form id="form-withdraw">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="withdraw-source-account">Source Account</label>
+            <select id="withdraw-source-account" class="form-control" required></select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="withdraw-amount">Withdrawal Amount</label>
+            <div class="input-with-currency">
+              <span class="currency-symbol-addon">$</span>
+              <input type="number" id="withdraw-amount" class="form-control" step="0.01" min="1" placeholder="0.00" required>
+            </div>
+          </div>
+
+          <!-- Presets -->
+          <div class="preset-buttons-row">
+            <button type="button" class="preset-btn" data-target-input="withdraw-amount" data-amount="40">$40</button>
+            <button type="button" class="preset-btn" data-target-input="withdraw-amount" data-amount="60">$60</button>
+            <button type="button" class="preset-btn" data-target-input="withdraw-amount" data-amount="100">$100</button>
+            <button type="button" class="preset-btn" data-target-input="withdraw-amount" data-amount="200">$200</button>
+            <button type="button" class="preset-btn" data-target-input="withdraw-amount" data-amount="500">$500</button>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="withdraw-pin">ATM Security PIN (Optional for Demo)</label>
+            <input type="password" id="withdraw-pin" class="form-control" maxlength="4" placeholder="••••">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="withdraw-note">Withdrawal Reason / Note</label>
+            <input type="text" id="withdraw-note" class="form-control" placeholder="e.g. Travel cash, ATM withdrawal">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-modal-close>Cancel</button>
+          <button type="submit" class="btn btn-danger">Confirm Withdrawal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 3. TRANSFER MODAL -->
+  <div id="modal-transfer" class="modal-overlay">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">💸 Transfer Funds</h3>
+        <button class="modal-close-btn" data-modal-close>&times;</button>
+      </div>
+      <form id="form-transfer">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="transfer-from-account">From Account</label>
+            <select id="transfer-from-account" class="form-control" required></select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="transfer-recipient-type">Transfer Destination Type</label>
+            <select id="transfer-recipient-type" class="form-control">
+              <option value="internal">Between My Own Apex Accounts</option>
+              <option value="external">To Another Person or External Bank</option>
+            </select>
+          </div>
+
+          <div id="transfer-internal-group" class="form-group">
+            <label class="form-label" for="transfer-to-account">To My Account</label>
+            <select id="transfer-to-account" class="form-control"></select>
+          </div>
+
+          <div id="transfer-external-group" class="form-group" style="display: none;">
+            <label class="form-label" for="transfer-external-target">Recipient Name, Email, or Account #</label>
+            <input type="text" id="transfer-external-target" class="form-control" placeholder="e.g. Elena Rostova or 4092 9980 1452">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="transfer-amount">Amount</label>
+            <div class="input-with-currency">
+              <span class="currency-symbol-addon">$</span>
+              <input type="number" id="transfer-amount" class="form-control" step="0.01" min="1" placeholder="0.00" required>
+            </div>
+          </div>
+
+          <!-- Presets -->
+          <div class="preset-buttons-row">
+            <button type="button" class="preset-btn" data-target-input="transfer-amount" data-amount="25">$25</button>
+            <button type="button" class="preset-btn" data-target-input="transfer-amount" data-amount="50">$50</button>
+            <button type="button" class="preset-btn" data-target-input="transfer-amount" data-amount="150">$150</button>
+            <button type="button" class="preset-btn" data-target-input="transfer-amount" data-amount="500">$500</button>
+            <button type="button" class="preset-btn" data-target-input="transfer-amount" data-amount="1000">$1,000</button>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="transfer-note">Transfer Memo / Reference</label>
+            <input type="text" id="transfer-note" class="form-control" placeholder="e.g. Rent share, dinner, gift">
+          </div>
+
+          <div style="font-size: 0.78rem; color: var(--text-muted); background: var(--bg-input); padding: 0.6rem; border-radius: var(--radius-sm);">
+            ⚡ Instant Apex Network Transfer • Fee: $0.00 • Guaranteed Settlement
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-modal-close>Cancel</button>
+          <button type="submit" class="btn btn-primary">Send Transfer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 4. PAY BILL MODAL -->
+  <div id="modal-pay-bill" class="modal-overlay">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">🧾 Pay Utility / Bill</h3>
+        <button class="modal-close-btn" data-modal-close>&times;</button>
+      </div>
+      <form id="form-pay-bill">
+        <input type="hidden" id="pay-bill-id">
+        <div class="modal-body">
+          <div class="receipt-card" style="padding: 1rem;">
+            <span id="pay-bill-title-display" style="font-size: 1.1rem; font-weight: 700;">Fiber Gigabit Internet</span>
+            <span id="pay-bill-provider-display" style="color: var(--text-muted); font-size: 0.85rem;">Verizon Fios</span>
+            <div id="pay-bill-amount-display" class="receipt-big-amount text-negative" style="font-size: 1.8rem; margin: 0.5rem 0;">$89.99</div>
+            <span style="font-size: 0.8rem; color: var(--warning);">Due: <span id="pay-bill-due-display">In 3 days</span></span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="pay-bill-source-account">Pay From Account</label>
+            <select id="pay-bill-source-account" class="form-control" required></select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-modal-close>Cancel</button>
+          <button type="submit" class="btn btn-primary">Authorize Payment</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 5. GOAL DEPOSIT MODAL -->
+  <div id="modal-goal-deposit" class="modal-overlay">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">🎯 Contribute to Savings Goal</h3>
+        <button class="modal-close-btn" data-modal-close>&times;</button>
+      </div>
+      <form id="form-goal-deposit">
+        <input type="hidden" id="goal-deposit-id">
+        <div class="modal-body">
+          <p style="font-size: 0.85rem; color: var(--text-secondary);">
+            Allocating funds to: <strong id="goal-deposit-title-display" style="color: var(--text-main);">Emergency Fund</strong>
+          </p>
+
+          <div class="form-group">
+            <label class="form-label" for="goal-source-account">Source Account</label>
+            <select id="goal-source-account" class="form-control" required></select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="goal-deposit-amount">Contribution Amount</label>
+            <div class="input-with-currency">
+              <span class="currency-symbol-addon">$</span>
+              <input type="number" id="goal-deposit-amount" class="form-control" step="0.01" min="1" placeholder="0.00" required>
+            </div>
+          </div>
+
+          <div class="preset-buttons-row">
+            <button type="button" class="preset-btn" data-target-input="goal-deposit-amount" data-amount="50">+$50</button>
+            <button type="button" class="preset-btn" data-target-input="goal-deposit-amount" data-amount="100">+$100</button>
+            <button type="button" class="preset-btn" data-target-input="goal-deposit-amount" data-amount="250">+$250</button>
+            <button type="button" class="preset-btn" data-target-input="goal-deposit-amount" data-amount="500">+$500</button>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-modal-close>Cancel</button>
+          <button type="submit" class="btn btn-primary">Deposit to Vault</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 6. CREATE ACCOUNT MODAL -->
+  <div id="modal-create-account" class="modal-overlay">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">➕ Open New Banking Account</h3>
+        <button class="modal-close-btn" data-modal-close>&times;</button>
+      </div>
+      <form id="form-create-account">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="new-account-type">Account Type</label>
+            <select id="new-account-type" class="form-control">
+              <option value="Checking">Checking Account (With Virtual Debit Card)</option>
+              <option value="Savings">High-Yield Savings (4.85% APY)</option>
+              <option value="Vault">Emergency Vault (5.10% APY)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="new-account-name">Account Nickname</label>
+            <input type="text" id="new-account-name" class="form-control" placeholder="e.g. Travel Checking, Tax Reserve" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="new-account-deposit">Initial Deposit (Optional)</label>
+            <div class="input-with-currency">
+              <span class="currency-symbol-addon">$</span>
+              <input type="number" id="new-account-deposit" class="form-control" step="0.01" min="0" placeholder="0.00" value="0.00">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-modal-close>Cancel</button>
+          <button type="submit" class="btn btn-primary">Open Account</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 7. CREATE GOAL MODAL -->
+  <div id="modal-create-goal" class="modal-overlay">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">🎯 Create New Savings Goal</h3>
+        <button class="modal-close-btn" data-modal-close>&times;</button>
+      </div>
+      <form id="form-create-goal">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="new-goal-title">Goal Name</label>
+            <input type="text" id="new-goal-title" class="form-control" placeholder="e.g. New Macbook Pro, Home Down Payment" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="new-goal-target">Target Amount</label>
+            <div class="input-with-currency">
+              <span class="currency-symbol-addon">$</span>
+              <input type="number" id="new-goal-target" class="form-control" step="1" min="10" placeholder="5000" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="new-goal-current">Starting Amount</label>
+            <div class="input-with-currency">
+              <span class="currency-symbol-addon">$</span>
+              <input type="number" id="new-goal-current" class="form-control" step="1" min="0" placeholder="0" value="0">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="new-goal-category">Category</label>
+            <select id="new-goal-category" class="form-control">
+              <option value="General">General Savings</option>
+              <option value="Travel">Vacation & Travel</option>
+              <option value="Transport">Automobile & Vehicle</option>
+              <option value="Security">Emergency Fund</option>
+              <option value="Home">Real Estate / Rent</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="new-goal-deadline">Target Deadline (Optional)</label>
+            <input type="text" id="new-goal-deadline" class="form-control" placeholder="e.g. Dec 2026 or Summer 2027">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-modal-close>Cancel</button>
+          <button type="submit" class="btn btn-primary">Start Goal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 8. ADJUST CARD LIMIT MODAL -->
+  <div id="modal-edit-limit" class="modal-overlay">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">⚙️ Adjust Daily Card Spending Limit</h3>
+        <button class="modal-close-btn" data-modal-close>&times;</button>
+      </div>
+      <form id="form-edit-limit">
+        <div class="modal-body">
+          <p style="font-size: 0.85rem; color: var(--text-secondary);">
+            Set maximum daily allowable card charges. Transactions exceeding this threshold will be blocked automatically.
+          </p>
+          <div class="form-group">
+            <label class="form-label" for="new-card-limit-input">New Daily Limit</label>
+            <div class="input-with-currency">
+              <span class="currency-symbol-addon">$</span>
+              <input type="number" id="new-card-limit-input" class="form-control" step="100" min="100" max="25000" required>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-modal-close>Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Limit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 9. TRANSACTION RECEIPT MODAL -->
+  <div id="modal-receipt" class="modal-overlay">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">🧾 Transaction Receipt</h3>
+        <button class="modal-close-btn" data-modal-close>&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="receipt-card">
+          <div style="font-size: 1.5rem; margin-bottom: 0.25rem;">🏦 ApexBank</div>
+          <span id="receipt-title" style="font-size: 1.05rem; font-weight: 700;">Direct Deposit</span>
+          <div id="receipt-amount" class="receipt-big-amount amount-positive">+$4,850.00</div>
+          <span id="receipt-status" class="badge-status-completed" style="align-self: center;">✓ Completed</span>
+
+          <div class="receipt-grid">
+            <span class="receipt-item-label">Reference ID</span>
+            <span id="receipt-ref" class="receipt-item-val font-mono">DIR-DEP-99482</span>
+
+            <span class="receipt-item-label">Timestamp</span>
+            <span id="receipt-date" class="receipt-item-val">Nov 18, 2026, 12:45 PM</span>
+
+            <span class="receipt-item-label">Account</span>
+            <span id="receipt-account" class="receipt-item-val">Premier Checking</span>
+
+            <span class="receipt-item-label">Counterparty</span>
+            <span id="receipt-counterparty" class="receipt-item-val">Acme Technologies</span>
+
+            <span class="receipt-item-label">Category</span>
+            <span id="receipt-category" class="receipt-item-val">Salary</span>
+
+            <span class="receipt-item-label">Network Fee</span>
+            <span id="receipt-fee" class="receipt-item-val">$0.00</span>
+
+            <span class="receipt-item-label">Notes</span>
+            <span id="receipt-notes" class="receipt-item-val">Bi-weekly payroll</span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-modal-close>Close</button>
+        <button type="button" id="btn-print-receipt" class="btn btn-primary">🖨️ Print Receipt</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10. RESET CONFIRMATION MODAL -->
+  <div id="modal-reset-confirm" class="modal-overlay">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">⚠️ Reset Demo System</h3>
+        <button class="modal-close-btn" data-modal-close>&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 0.9rem; color: var(--text-main);">
+          Are you sure you want to reset all mock banking accounts, transactions, bills, and goals to their default initial state?
+        </p>
+        <p style="font-size: 0.8rem; color: var(--text-muted);">
+          This will clear any custom deposits, transfers, or new accounts created in your browser's local storage.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-modal-close>Cancel</button>
+        <button type="button" id="confirm-reset-btn" class="btn btn-danger">Yes, Reset All Data</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <!-- Scripts -->
+  <script src="js/store.js"></script>
+  <script src="js/chart.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
